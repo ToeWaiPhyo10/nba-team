@@ -3,12 +3,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Team, Player } from "@/types";
 
-export interface TeamsState {
+export interface TeamState {
   teams: Team[];
   selectedTeam: Team | null;
 }
 
-const initialState: TeamsState = {
+const initialState: TeamState = {
   teams: [],
   selectedTeam: null,
 };
@@ -17,9 +17,6 @@ const teamSlice = createSlice({
   name: "teams",
   initialState,
   reducers: {
-    initializeTeams: (state, action: PayloadAction<Team[]>) => {
-      state.teams = action.payload;
-    },
     addTeam: (state, action: PayloadAction<Team>) => {
       state.teams.push(action.payload);
       localStorage.setItem("teams", JSON.stringify(state.teams));
@@ -71,7 +68,6 @@ const teamSlice = createSlice({
 });
 
 export const {
-  initializeTeams,
   addTeam,
   updateTeam,
   deleteTeam,

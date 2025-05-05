@@ -18,7 +18,8 @@ export interface Team {
   id: number;
   full_name: string;
   city: string;
-  name?: string; // For backward compatibility
+  region: string;
+  name?: string;
   players: Player[];
 }
 

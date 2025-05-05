@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { configureStore, combineReducers } from '@reduxjs/toolkit';
-import { persistStore, persistReducer, createTransform } from 'redux-persist';
-import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { persistStore, persistReducer } from "redux-persist";
+import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 
 const createNoopStorage = () => {
   return {
@@ -18,26 +18,27 @@ const createNoopStorage = () => {
   };
 };
 
-const storage = typeof window !== 'undefined' 
-  ? createWebStorage('local')
-  : createNoopStorage();
-import authReducer from '@/store/authSlice';
-import teamReducer, { TeamsState } from '@/store/teamSlice';
-import { User } from '@/types';
-import { apiSlice } from './apiSlice';
-import themeReducer from './themeSlice';
+const storage =
+  typeof window !== "undefined"
+    ? createWebStorage("local")
+    : createNoopStorage();
+import authReducer from "@/store/authSlice";
+import teamReducer, { TeamState } from "@/store/teamSlice";
+import { User } from "@/types";
+import { apiSlice } from "./apiSlice";
+import themeReducer from "./themeSlice";
 
 export interface RootState {
   auth: User;
-  teams: TeamsState;
-  theme: { theme: 'dark' | 'light' | 'system' };
+  teams: TeamState;
+  theme: { theme: "dark" | "light" | "system" };
   [apiSlice.reducerPath]: ReturnType<typeof apiSlice.reducer>;
 }
 
 const persistConfig = {
-  key: 'root',
+  key: "root",
   storage,
-  whitelist: ['auth', 'teams'] // Only auth and teams will be persisted
+  whitelist: ["auth", "teams"], // Only auth and teams will be persisted
 };
 
 const rootReducer = combineReducers({
@@ -57,7 +58,7 @@ function makeStore() {
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         serializableCheck: {
-          ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
+          ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
         },
       }).concat(apiSlice.middleware),
   });
@@ -68,7 +69,7 @@ function makeStore() {
 }
 
 export function getStoreInstance() {
-  if (typeof window === 'undefined') return makeStore();
+  if (typeof window === "undefined") return makeStore();
 
   if (!store) store = makeStore();
 

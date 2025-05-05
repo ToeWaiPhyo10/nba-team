@@ -110,7 +110,6 @@ export const apiSlice = createApi({
         }
       },
       serializeQueryArgs: ({ queryArgs }) => {
-        // Only use search param for cache key
         return queryArgs.search || "";
       },
       merge: (currentCache, newItems) => {

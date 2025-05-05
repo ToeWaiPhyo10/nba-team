@@ -1,34 +1,51 @@
 "use client";
 
-import { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { LoginForm } from "@/components/auth/LoginForm";
 import { Header } from "@/components/Header";
-import { PlayerList } from "@/components/players/PlayerList";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   );
-  const [isTeamFormOpen, setIsTeamFormOpen] = useState(false);
 
   if (!isAuthenticated) {
     return (
-      <main className="container mx-auto px-4 py-8">
-        <LoginForm />
-      </main>
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="w-full max-w-md">
+          <LoginForm />
+        </div>
+      </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="container mx-auto px-4 py-8">
-        <section className="space-y-4">
-          <h2 className="text-2xl font-semibold">Players List</h2>
-          <PlayerList />
-        </section>
+      <main className="container mx-auto px-4 flex items-center justify-center" style={{ minHeight: 'calc(100vh - 64px)' }}>
+        <div className="w-full max-w-md">
+          <h1 className="text-4xl font-bold text-center mb-12">NBA Teams App</h1>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Button
+              size="lg"
+              className="w-full text-lg py-6"
+              onClick={() => router.push("/players")}
+            >
+              Browse Players
+            </Button>
+            <Button
+              size="lg"
+              className="w-full text-lg py-6"
+              onClick={() => router.push("/teams")}
+            >
+              Manage Teams
+            </Button>
+          </div>
+        </div>
       </main>
     </div>
   );

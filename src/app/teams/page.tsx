@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { LoginForm } from "@/components/auth/LoginForm";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
 import { useModal } from "@/app/hooks/useModal";
 import { useEditId } from "@/app/hooks/useEditId";
 import { TeamForm } from "@/components/teams/TeamForm";

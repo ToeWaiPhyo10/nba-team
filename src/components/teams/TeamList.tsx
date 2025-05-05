@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useModal } from "@/app/hooks/useModal";
 import { useEditId } from "@/app/hooks/useEditId";
 import { RootState } from "@/store";
@@ -10,17 +10,12 @@ import { Button } from "@/components/ui/button";
 import { DeleteTeamDialog } from "./DeleteTeamDialog";
 import { TeamPlayersDialog } from "./TeamPlayersDialog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { toast } from "sonner";
-import { PlusIcon } from "@radix-ui/react-icons";
+
 import { EmptyState } from "@/components/ui/empty-state";
 import { PersonIcon } from "@radix-ui/react-icons";
 import { TeamForm } from "./TeamForm";
-import { useRouter } from "next/navigation";
-import { deleteTeam } from "@/store/teamSlice";
 
 export function TeamList() {
-  const dispatch = useDispatch();
-  const router = useRouter();
   const teams = useSelector((state: RootState) => state.teams.teams);
   const {
     modalState,
@@ -30,7 +25,7 @@ export function TeamList() {
     openPlayersModal,
     closeModal,
   } = useModal();
-  const { editTeamId, setEditId, clearEditId } = useEditId();
+  const { editTeamId, setEditId } = useEditId();
   const [teamToDelete, setTeamToDelete] = useState<Team | null>(null);
   const [teamToShowPlayers, setTeamToShowPlayers] = useState<Team | null>(null);
 
@@ -48,11 +43,6 @@ export function TeamList() {
     );
   }
 
-  const handleClose = () => {
-    closeModal();
-    clearEditId();
-  };
-
   const handleEdit = (team: Team) => {
     setEditId(team.id.toString());
     openEditModal();
@@ -68,9 +58,7 @@ export function TeamList() {
     openPlayersModal();
   };
 
-  const handleCreateTeam = () => {
-    openCreateModal();
-  };
+
 
   return (
     <div className="space-y-6">

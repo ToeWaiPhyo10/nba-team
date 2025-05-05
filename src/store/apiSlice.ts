@@ -1,7 +1,7 @@
 "use client";
 
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { Player, Team } from "@/types";
+import { Player } from "@/types";
 import { BalldontlieAPI } from "@balldontlie/sdk";
 
 // Retry logic with exponential backoff
@@ -15,8 +15,9 @@ const retryWithBackoff = async <T>(
   for (let i = 0; i < maxRetries; i++) {
     try {
       return await fn();
-    } catch (error: any) {
-      if (error?.status === 429 && i < maxRetries - 1) {
+    } catch (error) {
+      const err = error as { status?: number };
+      if (err.status === 429 && i < maxRetries - 1) {
         const delay = baseDelay * Math.pow(2, i);
         await wait(delay);
         continue;
@@ -58,7 +59,7 @@ export const apiSlice = createApi({
       PlayersResponse,
       { cursor?: number; per_page?: number; search?: string }
     >({
-      async queryFn(arg, api) {
+      async queryFn(arg) {
         const { cursor, per_page = 10, search } = arg || {};
 
         try {
@@ -70,7 +71,7 @@ export const apiSlice = createApi({
             })
           );
 
-          const players = response.data.map((player: any) => ({
+          const players = response.data.map((player) => ({
             id: player.id,
             first_name: player.first_name,
             last_name: player.last_name,
@@ -103,7 +104,7 @@ export const apiSlice = createApi({
               error instanceof Error
                 ? error.message
                 : "An unknown error occurred",
-            status: (error as any)?.status || 500,
+            status: (error as { status?: number })?.status || 500,
             name: error instanceof Error ? error.name : "Error",
           };
           return { error: serializedError };
@@ -156,7 +157,7 @@ export const apiSlice = createApi({
               error instanceof Error
                 ? error.message
                 : "An unknown error occurred",
-            status: (error as any)?.status || 500,
+            status: (error as { status?: number })?.status || 500,
             name: error instanceof Error ? error.name : "Error",
           };
           return { error: serializedError };

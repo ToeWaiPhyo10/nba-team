@@ -4,16 +4,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useDispatch, useSelector } from "react-redux";
-import { useState, useEffect } from "react";
-import { RootState } from "@/store";
-import { Team, Player } from "@/types";
+import { Team } from "@/types";
 import { addTeam, updateTeam } from "@/store/teamSlice";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,7 +23,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { useModal } from "@/app/hooks/useModal";
+
+import { RootState } from "@/store";
 
 const teamSchema = z.object({
   full_name: z.string().min(1, "Team name is required"),
@@ -44,7 +42,6 @@ interface TeamFormProps {
 
 export function TeamForm({ open, onOpenChange, team }: TeamFormProps) {
   const dispatch = useDispatch();
-  const { modalState, closeModal } = useModal();
   const teams = useSelector((state: RootState) => state.teams.teams);
 
   const form = useForm<FormData>({
@@ -86,7 +83,7 @@ export function TeamForm({ open, onOpenChange, team }: TeamFormProps) {
       }
       onOpenChange(false);
       form.reset();
-    } catch (error) {
+    } catch {
       toast.error("Failed to save team");
     }
   };

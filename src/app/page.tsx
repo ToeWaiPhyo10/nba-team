@@ -26,20 +26,27 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="container mx-auto px-4 flex items-center justify-center" style={{ minHeight: 'calc(100vh - 64px)' }}>
+      <main
+        className="container mx-auto px-4 flex items-center justify-center"
+        style={{ minHeight: "calc(100vh - 64px)" }}
+      >
         <div className="w-full max-w-md">
-          <h1 className="text-4xl font-bold text-center mb-12">NBA Teams App</h1>
+          <h1 className="text-4xl font-bold text-center mb-12">
+            NBA Teams App
+          </h1>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Button
               size="lg"
-              className="w-full text-lg py-6"
+              variant="default"
+              className="w-full text-lg py-6 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors duration-200 shadow-lg hover:shadow-xl"
               onClick={() => router.push("/players")}
             >
               Browse Players
             </Button>
             <Button
               size="lg"
-              className="w-full text-lg py-6"
+              variant="outline"
+              className="w-full text-lg py-6 border-2 border-primary hover:bg-primary hover:text-primary-foreground transition-colors duration-200 shadow-lg hover:shadow-xl"
               onClick={() => router.push("/teams")}
             >
               Manage Teams

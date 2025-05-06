@@ -4,30 +4,6 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { Player } from "@/types";
 import { BalldontlieAPI } from "@balldontlie/sdk";
 
-// Retry logic with exponential backoff
-const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-const retryWithBackoff = async <T>(
-  fn: () => Promise<T>,
-  maxRetries = 3,
-  baseDelay = 1000
-): Promise<T> => {
-  for (let i = 0; i < maxRetries; i++) {
-    try {
-      return await fn();
-    } catch (error) {
-      const err = error as { status?: number };
-      if (err.status === 429 && i < maxRetries - 1) {
-        const delay = baseDelay * Math.pow(2, i);
-        await wait(delay);
-        continue;
-      }
-      throw error;
-    }
-  }
-  throw new Error("Max retries reached");
-};
-
 const balldontlieApi = new BalldontlieAPI({
   apiKey: process.env.NEXT_PUBLIC_BALLDONTLIE_API_KEY || "",
 });
@@ -63,13 +39,11 @@ export const apiSlice = createApi({
         const { cursor, per_page = 10, search } = arg || {};
 
         try {
-          const response = await retryWithBackoff(() =>
-            balldontlieApi.nba.getPlayers({
-              per_page,
-              search,
-              cursor,
-            })
-          );
+          const response = await balldontlieApi.nba.getPlayers({
+            per_page,
+            search,
+            cursor,
+          });
 
           const players = response.data.map((player) => ({
             id: player.id,
@@ -130,9 +104,8 @@ export const apiSlice = createApi({
     getPlayerById: builder.query<Player, number>({
       async queryFn(id) {
         try {
-          const response = await retryWithBackoff(() =>
-            balldontlieApi.nba.getPlayer(id)
-          );
+          const response = await balldontlieApi.nba.getPlayer(id);
+
           if (!response.data) {
             return { error: "Player not found" };
           }

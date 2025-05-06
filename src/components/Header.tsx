@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "@/store/authSlice";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
@@ -14,10 +14,12 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
+import { RootState } from "@/store";
 
 export function Header() {
   const dispatch = useDispatch();
   const pathname = usePathname();
+  const username = useSelector((state: RootState) => state.auth.username);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -62,6 +64,9 @@ export function Header() {
             <SheetContent side="left" className="w-64">
               <SheetHeader>
                 <SheetTitle>Menu</SheetTitle>
+                <div className="mt-2 px-2 text-sm text-muted-foreground">
+                  Hello, {username}
+                </div>
               </SheetHeader>
               <div className="flex flex-col h-full py-4">
                 <div className="flex-1 space-y-4">
@@ -97,6 +102,7 @@ export function Header() {
 
         {/* Desktop Actions */}
         <div className="hidden sm:flex items-center gap-4">
+          <span className="text-sm">Hello, {username}</span>
           <ThemeToggle />
           <Button variant="ghost" onClick={handleLogout}>
             Logout
